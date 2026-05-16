@@ -1,41 +1,30 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  scroll-behavior: smooth;
-  font-family: "Poppins", sans-serif;
-}
-
-body {
-  margin: 0px !important;
-  padding: 0;
-  font-family: "Montserrat", sans-serif;
-}
-
-/* width */
-::-webkit-scrollbar {
-  width: 4px;
-  height: 80px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #222a35;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #575c66;
-  border-radius: 6px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #626970;
-}
-
-::-webkit-backdrop-filter {
-  blur: 3px saturate(106%);
+:root {
+  --bg: #0a0a0f;
+  --bg-alt: #0f0f18;
+  --surface: #14141f;
+  --surface-alt: #1a1a2e;
+  --border: #1e1e32;
+  --primary: #7c5cfc;
+  --primary-dim: rgba(124, 92, 252, 0.1);
+  --accent: #4ecdc4;
+  --text: #e8e8f0;
+  --text-dim: #8888a0;
+  --text-muted: #555570;
+  --danger: #ff6b6b;
+  --success: #4ecdc4;
+  --white: #ffffff;
+  --black: #000000;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
 }

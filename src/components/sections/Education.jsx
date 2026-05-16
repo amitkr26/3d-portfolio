@@ -1,77 +1,136 @@
-import React from "react";
-import { VerticalTimeline } from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
 import styled from "styled-components";
-import { education } from "../../data/constants";
-import EducationCard from "../cards/EducationCard";
-import EarthCanvas from "../canvas/Earth";
+import { Section } from "../ui/Section";
+import { useScrollReveal } from "../../hooks/useScrollReveal";
+import { education } from "../../data/profile";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-contnet: center;
-  position: rlative;
-  z-index: 1;
-  align-items: center;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: ${({ theme }) => theme.spacing.lg};
+  max-width: 700px;
 `;
 
-const Wrapper = styled.div`
+const EduCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  padding: ${({ theme }) => theme.spacing.xl};
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1100px;
-  gap: 12px;
-  @media (max-width: 960px) {
-    flex-direction: column;
-  }
-`;
-const Title = styled.div`
-  font-size: 52px;
-  text-align: center;
-  font-weight: 600;
-  margin-top: 20px;
-  color: ${({ theme }) => theme.text_primary};
-  @media (max-width: 768px) {
-    margin-top: 12px;
-    font-size: 32px;
-  }
-`;
-const Desc = styled.div`
-  font-size: 18px;
-  text-align: center;
-  font-weight: 600;
-  color: ${({ theme }) => theme.text_secondary};
-  @media (max-width: 768px) {
-    font-size: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+
+  ${({ $visible }) => $visible && `
+    opacity: 1;
+    transform: translateY(0);
+  `}
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: ${({ theme }) => theme.radii.sm} 0 0 ${({ theme }) => theme.radii.sm};
   }
 `;
 
-const Education = () => {
+const Period = styled.span`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.primary};
+`;
+
+const Institution = styled.h3`
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.text};
+  margin: ${({ theme }) => theme.spacing.xs} 0;
+`;
+
+const Degree = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  color: ${({ theme }) => theme.colors.textDim};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+
+  span {
+    color: ${({ theme }) => theme.colors.accent};
+  }
+`;
+
+const Description = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textMuted};
+  line-height: 1.7;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const Highlights = styled.ul`
+  padding-left: ${({ theme }) => theme.spacing.lg};
+`;
+
+const Highlight = styled.li`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textDim};
+  line-height: 1.7;
+  list-style: none;
+  position: relative;
+
+  &::before {
+    content: "▹";
+    position: absolute;
+    left: -${({ theme }) => theme.spacing.lg};
+    color: ${({ theme }) => theme.colors.accent};
+  }
+`;
+
+function EducationEntry({ item, index }) {
+  const [ref, visible] = useScrollReveal();
+
   return (
-    <Container id="Education">
-      <Wrapper>
-        <Title>Education</Title>
-        <Desc
-          style={{
-            marginBottom: "40px",
-          }}
-        >
-          My education has been a journey of self-discovery and growth. My
-          educational details are as follows.
-        </Desc>
-
-        <VerticalTimeline>
-          {education.map((education, index) => (
-            <EducationCard key={`education-${index}`} education={education} />
+    <EduCard
+      ref={ref}
+      $visible={visible}
+      style={{ transitionDelay: `${index * 120}ms` }}
+    >
+      <Period>{item.period}</Period>
+      <Institution>{item.institution}</Institution>
+      <Degree>
+        {item.degree}
+        {item.specialization && <span> — {item.specialization}</span>}
+      </Degree>
+      <Description>{item.description}</Description>
+      {item.highlights.length > 0 && (
+        <Highlights>
+          {item.highlights.map((h, i) => (
+            <Highlight key={i}>{h}</Highlight>
           ))}
-        </VerticalTimeline>
-        <EarthCanvas />
-      </Wrapper>
-    </Container>
+        </Highlights>
+      )}
+    </EduCard>
   );
-};
+}
 
-export default Education;
+export function Education() {
+  if (education.length === 0) {
+    return (
+      <Section id="education" label="Background" title="Education">
+        <p style={{ color: "var(--text-dim)", textAlign: "center" }}>
+          Education details are being updated.
+        </p>
+      </Section>
+    );
+  }
+
+  return (
+    <Section id="education" label="Background" title="Education">
+      <Grid>
+        {education.map((item, i) => (
+          <EducationEntry key={item.id} item={item} index={i} />
+        ))}
+      </Grid>
+    </Section>
+  );
+}

@@ -1,152 +1,132 @@
-import React, { useState } from "react";
 import styled from "styled-components";
-import { projects } from "../../data/constants";
-import ProjectCard from "../cards/ProjectCard";
+import { Section } from "../ui/Section";
+import { Card } from "../ui/Card";
+import { Tag } from "../ui/Tag";
+import { Button } from "../ui/Button";
+import { projects } from "../../data/profile";
 
-const Container = styled.div`
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: ${({ theme }) => theme.spacing.lg};
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const ProjectTitle = styled.h3`
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+const ProjectCategory = styled.span`
+  display: inline-block;
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.accent};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+`;
+
+const ProjectMeta = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-contnet: center;
-  margin-top: 50px;
-  padding: 0px 16px;
-  position: rlative;
-  z-index: 1;
   align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1100px;
-  gap: 12px;
-  @media (max-width: 960px) {
-    flex-direction: column;
-  }
-`;
-const Title = styled.div`
-  font-size: 52px;
-  text-align: center;
-  font-weight: 600;
-  margin-top: 20px;
-  color: ${({ theme }) => theme.text_primary};
-  @media (max-width: 768px) {
-    margin-top: 12px;
-    font-size: 32px;
-  }
-`;
-const Desc = styled.div`
-  font-size: 18px;
-  text-align: center;
-  font-weight: 600;
-  color: ${({ theme }) => theme.text_secondary};
-  @media (max-width: 768px) {
-    font-size: 16px;
-  }
+const ProjectYear = styled.span`
+  font-family: ${({ theme }) => theme.fonts.mono};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
-const ToggleButtonGroup = styled.div`
-  display: flex;
-  border: 1.5px solid ${({ theme }) => theme.primary};
-  color: ${({ theme }) => theme.primary};
-  font-size: 16px;
-  border-radius: 12px;
-font-weight 500;
-margin: 22px 0;
-@media (max-width: 768px){
-    font-size: 12px;
-}
-`;
-const ToggleButton = styled.div`
-  padding: 8px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  &:hover {
-    background: ${({ theme }) => theme.primary + 20};
-  }
-  @media (max-width: 768px) {
-    padding: 6px 8px;
-    border-radius: 4px;
-  }
-  ${({ active, theme }) =>
-    active &&
-    `
-  background:  ${theme.primary + 20};
-  `}
-`;
-const Divider = styled.div`
-  width: 1.5px;
-  background: ${({ theme }) => theme.primary};
+const ProjectDesc = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textDim};
+  line-height: 1.7;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
-const CardContainer = styled.div`
+const TechRow = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 28px;
   flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.xs};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
 `;
 
-const Projects = () => {
-  const [toggle, setToggle] = useState("all");
+const Actions = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.sm};
+  margin-top: auto;
+`;
+
+export function Projects() {
+  if (projects.length === 0) {
+    return (
+      <Section id="projects" label="Work" title="Projects">
+        <p style={{ color: "var(--text-dim)", textAlign: "center" }}>
+          Projects are being documented. Check back soon.
+        </p>
+      </Section>
+    );
+  }
+
   return (
-    <Container id="Projects">
-      <Wrapper>
-        <Title>Projects</Title>
-        <Desc
-          style={{
-            marginBottom: "40px",
-          }}
-        >
-          I have worked on a wide range of projects. From web apps to android
-          apps. Here are some of my projects.
-        </Desc>
-
-        <ToggleButtonGroup>
-          <ToggleButton
-            active={toggle === "all"}
-            onClick={() => setToggle("all")}
-          >
-            ALL
-          </ToggleButton>
-          <Divider />
-          <ToggleButton
-            active={toggle === "web app"}
-            onClick={() => setToggle("web app")}
-          >
-            WEB APP"S
-          </ToggleButton>
-          <Divider />
-          <ToggleButton
-            active={toggle === "android app"}
-            onClick={() => setToggle("android app")}
-          >
-            ANDROID APP'S
-          </ToggleButton>
-          <Divider />
-          <ToggleButton
-            active={toggle === "machine learning"}
-            onClick={() => setToggle("machine learning")}
-          >
-            MACHINE LEARNING
-          </ToggleButton>
-        </ToggleButtonGroup>
-
-        <CardContainer>
-          {toggle === "all" &&
-            projects.map((project) => <ProjectCard project={project} />)}
-          {projects
-            .filter((item) => item.category === toggle)
-            .map((project) => (
-              <ProjectCard project={project} />
-            ))}
-        </CardContainer>
-      </Wrapper>
-    </Container>
+    <Section id="projects" label="Work" title="Projects">
+      <Grid>
+        {projects.map((project, i) => (
+          <Card key={project.id} delay={i * 80}>
+            <ProjectCategory>{project.category}</ProjectCategory>
+            <ProjectMeta>
+              <ProjectYear>{project.year}</ProjectYear>
+            </ProjectMeta>
+            <ProjectTitle>{project.title}</ProjectTitle>
+            <ProjectDesc>{project.description}</ProjectDesc>
+            <TechRow>
+              {project.technologies.map((tech) => (
+                <Tag key={tech}>{tech}</Tag>
+              ))}
+            </TechRow>
+            <Actions>
+              {project.links.github && (
+                <Button
+                  href={project.links.github}
+                  target="_blank"
+                  variant="outline"
+                  size="sm"
+                >
+                  Source
+                </Button>
+              )}
+              {project.links.demo && (
+                <Button
+                  href={project.links.demo}
+                  target="_blank"
+                  variant="primary"
+                  size="sm"
+                >
+                  Live Demo
+                </Button>
+              )}
+              {project.links.article && (
+                <Button
+                  href={project.links.article}
+                  target="_blank"
+                  variant="ghost"
+                  size="sm"
+                >
+                  Read More
+                </Button>
+              )}
+            </Actions>
+          </Card>
+        ))}
+      </Grid>
+    </Section>
   );
-};
-
-export default Projects;
+}

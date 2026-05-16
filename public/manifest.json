@@ -1,6 +1,12 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Amit Kumar",
+  "name": "Amit Kumar — Electronics Engineer",
+  "description": "Semiconductor devices, thin film technology, embedded systems portfolio",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0a0a0f",
+  "background_color": "#0a0a0f",
+  "categories": ["education", "engineering", "portfolio", "technology"],
   "icons": [
     {
       "src": "favicon.ico",
@@ -17,9 +23,5 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  ]
 }
